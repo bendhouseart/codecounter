@@ -27,16 +27,9 @@ class Counter(object):
                     self.code_files[self.collect_file_extension(file)] = []
 
                 num_lines = self.read_lines_of_code(os.path.join(root, file))
-                self.code_files[self.collect_file_extension(file)].append({"File": os.path.join(root, file),
-                                                                           "Number_Of_Lines": num_lines})
-        total_num_files = 0
-        #for key, value in self.code_files.items():
-        #    print(key)
-        #    for each in value:
-        #        print(each)
-        #        total_num_files += each['Number_of_Lines']
-
-        #print("Total number of lines of code: {}".format(total_num_files))
+                if num_lines > 0 and '.git' not in file and '.git' not in root and '.lock' not in file:
+                    self.code_files[self.collect_file_extension(file)].append({"File": os.path.join(root, file),
+                                                                            "Number_Of_Lines": num_lines})
 
     @staticmethod
     def read_lines_of_code(file_path):
