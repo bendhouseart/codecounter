@@ -1,5 +1,6 @@
 """Main module."""
 import os
+import pandas
 
 
 class Counter(object):
@@ -8,6 +9,7 @@ class Counter(object):
             self.path = path
             self.code_files = {}
             self.file_types = []
+            self.dataframe = pandas.DataFrame()
         else:
             raise NotADirectoryError(path)
 
@@ -25,11 +27,16 @@ class Counter(object):
                     self.code_files[self.collect_file_extension(file)] = []
 
                 num_lines = self.read_lines_of_code(os.path.join(root, file))
-                self.code_files[self.collect_file_extension(file)].append((os.path.join(root, file), num_lines))
-        for key, value in self.code_files.items():
-            print(key)
-            for each in value:
-                print(each)
+                self.code_files[self.collect_file_extension(file)].append({"File": os.path.join(root, file),
+                                                                           "Number_Of_Lines": num_lines})
+        total_num_files = 0
+        #for key, value in self.code_files.items():
+        #    print(key)
+        #    for each in value:
+        #        print(each)
+        #        total_num_files += each['Number_of_Lines']
+
+        #print("Total number of lines of code: {}".format(total_num_files))
 
     @staticmethod
     def read_lines_of_code(file_path):
@@ -40,3 +47,14 @@ class Counter(object):
                 except UnicodeDecodeError:
                     num_lines = []
             return len(num_lines)
+
+    def build_dataframe(self):
+        self.dataframe = pandas.DataFrame(columns=['FileType', 'File', 'Number_Of_Lines'])
+        for code_type, list_of_files in self.code_files.items():
+            for code_file in list_of_files:
+                self.dataframe =self.dataframe.append({'FileType': code_type,
+                                       'File': code_file['File'],
+                                       'Number_Of_Lines': code_file['Number_Of_Lines']}, ignore_index=True)
+
+    def export_dataframe(self, export_path):
+        self.dataframe.to_csv(export_path, index=False)

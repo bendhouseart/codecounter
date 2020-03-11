@@ -1,0 +1,7 @@
+FileType,File,Number_Of_Lines
+.py,./test_codecounter.py,126
+.py,./fake_code_file.py,3
+.py,./__init__.py,1
+.csv,./test_dataframe.csv,7
+.pyc,./__pycache__/__init__.cpython-36.pyc,0
+.pyc,./__pycache__/test_codecounter.cpython-36-pytest-5.3.5.pyc,0
